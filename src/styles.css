@@ -1,0 +1,116 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+nav {
+  display: flex;
+  justify-content: end;
+}
+
+nav a {
+  text-decoration: none;
+  margin: 10px;
+  padding: 12px 20px;
+  border-radius: 50px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+h1 {
+  font-size: 36px;
+  margin-top: 50px;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+input[type="text"] {
+  padding: 12px;
+  border-radius: 50px;
+  border: none;
+  width: 300px;
+  font-size: 16px;
+  background-color: #f1f1f1;
+  transition: background-color 0.3s ease-in-out;
+}
+
+input[type="text"]:focus {
+  background-color: #fff;
+  box-shadow: 0 0 5px #ddd;
+}
+
+button {
+  padding: 12px 20px;
+  border-radius: 50px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #3e8e41;
+}
+
+#results {
+  margin-top: 30px;
+  text-align: left;
+}
+
+#results p:nth-child(odd) {
+  background-color: #4caf50;
+}
+
+#results p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+#results h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #222;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#results p:first-of-type {
+  margin-top: 0;
+}
+
+#results .no-results {
+  font-size: 16px;
+  font-style: italic;
+  color: #777;
+}
+
+@media only screen and (max-width: 600px) {
+  input[type="text"] {
+    width: 100%;
+  }
+
+  button {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
+  }
+}

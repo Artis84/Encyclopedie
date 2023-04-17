@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Create Sample Data</title>
+        <link rel="stylesheet" href="form.css" />
+    </head>
+    <body>
+        <nav>
+            <a href="/">Accueil</a>
+        </nav>
+        <div class="container">
+            <h1>Create Sample Data</h1>
+            <form id="form">
+                <div class="form-group">
+                    <label for="title">title:</label>
+                    <input type="text" id="title" name="title" required />
+                </div>
+                <div class="form-group">
+                    <label for="content">content:</label>
+                    <input type="text" id="content" name="content" required />
+                </div>
+                <button id="send-form" type="submit">Create Sample Data</button>
+            </form>
+            <div id="status"></div>
+        </div>
+        <script src="form.js"></script>
+    </body>
+</html>
