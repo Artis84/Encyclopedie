@@ -1,5 +1,6 @@
 // Define the path to your JSON file
-const jsonPath = "data";
+// const jsonPath = "http://127.0.0.1:5001/encyclopedie-a9303/us-central1/app/data";
+const jsonPath = "https://us-central1-encyclopedie-a9303.cloudfunctions.net/app/data";
 
 // Fetch the JSON data
 const getJsonData = async () => {
