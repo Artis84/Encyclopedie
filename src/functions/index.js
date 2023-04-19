@@ -1,6 +1,6 @@
 // Define the path to your JSON file
-// const jsonPath = "http://127.0.0.1:5001/encyclopedie-a9303/us-central1/app/data";
-const jsonPath = "https://us-central1-encyclopedie-a9303.cloudfunctions.net/app/data";
+// const jsonPath = "http://localhost:5001/encyclopedie-a9303/europe-west1/app/data";
+const jsonPath = "https://europe-west1-encyclopedie-a9303.cloudfunctions.net/app/data";
 
 // Fetch the JSON data
 const getJsonData = async () => {
@@ -15,9 +15,20 @@ const search = (data, keyword) => {
     return results;
 };
 
+const displayError = (err) => {
+    const error = document.getElementById("error");
+    error.style.display = "block";
+    error.innerHTML = "";
+    error.innerHTML = `<p>❌Error: ${err.message}</p>`;
+    setTimeout(() => {
+        error.style.display = "none";
+    }, 5000);
+};
+
 // Display results
 const displayResults = (results) => {
     const resultsDiv = document.getElementById("results");
+    resultsDiv.style.display = "block";
     resultsDiv.innerHTML = "";
     if (results.length > 0) {
         results.forEach((result) => {
@@ -36,19 +47,28 @@ const displayResults = (results) => {
 // Initiate search on button click
 const searchBtn = document.getElementById("search-btn");
 searchBtn.addEventListener("click", async () => {
-    const keyword = document.getElementById("search-input").value;
-    const data = await getJsonData();
-    const results = search(data, keyword);
-    displayResults(results);
-});
-
-// Initiate search on enter key press
-const searchInput = document.getElementById("search-input");
-searchInput.addEventListener("keyup", async (event) => {
-    if (event.keyCode === 13) {
-        const keyword = searchInput.value;
+    try {
+        const keyword = document.getElementById("search-input").value;
+        if (keyword.length == 0) throw new Error("La boite de saisie est vide");
         const data = await getJsonData();
         const results = search(data, keyword);
         displayResults(results);
+    } catch (error) {
+        displayError(error);
+    }
+});
+
+const searchInput = document.getElementById("search-input");
+searchInput.addEventListener("keyup", async (event) => {
+    try {
+        if (event.keyCode === 13) {
+            const keyword = searchInput.value;
+            if (keyword.length == 0) throw new Error("La boite de saisie est vide");
+            const data = await getJsonData();
+            const results = search(data, keyword);
+            displayResults(results);
+        }
+    } catch (error) {
+        displayError(error);
     }
 });
