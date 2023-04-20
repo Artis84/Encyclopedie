@@ -1,30 +1,16 @@
 const express = require("express");
-const path = require("path");
 const fs = require("fs");
+const cors = require("cors");
 const app = express();
 const functions = require("firebase-functions");
 
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-// app.use(express.static(path.join(__dirname, "..")));
-app.use(express.static(__dirname));
 
 const options = {
-    // root: path.join(__dirname, ".."),
-    root: path.join(__dirname),
+    root: __dirname,
 };
-
-app.get("/form", (req, res, next) => {
-    const fileName = "form.html";
-    // const fileName = "form.html";
-    res.sendFile(fileName, options, (err) => {
-        if (err) {
-            return next(err);
-        } else {
-            console.log("Rooting to:", fileName);
-        }
-    });
-});
 
 app.get("/data", (req, res, next) => {
     const fileName = "data.json";
@@ -38,12 +24,10 @@ app.get("/data", (req, res, next) => {
 });
 
 app.post("/submit-form", (req, res, next) => {
-    // const jsonData = fs.readFileSync(path.join(__dirname, "..", "data.json"), (err) => next(err));
     const jsonData = fs.readFileSync("data.json", (err) => next(err));
     const dataObject = JSON.parse(jsonData);
     dataObject.push(req.body);
     const newData = JSON.stringify(dataObject);
-    // fs.writeFile(path.join(__dirname, "..", "data.json"), newData, (err) => {
     fs.writeFile("data.json", newData, (err) => {
         if (err) {
             res.status(500).json("An error as popped");

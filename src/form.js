@@ -7,14 +7,15 @@ form.addEventListener("submit", (event) => {
     const formData = new FormData(event.target); // Get form data
     const data = Object.fromEntries(formData.entries()); // Convert FormData to object
 
-    // const jsonPath = "http://localhost:5001/encyclopedie-a9303/europe-west1/app/submit-form";
-    const jsonPath = "https://europe-west1-encyclopedie-a9303.cloudfunctions.net/app/submit-form";
+    const jsonPath = "http://localhost:5001/encyclopedie-a9303/europe-west1/app/submit-form";
+    // const jsonPath = "https://europe-west1-encyclopedie-a9303.cloudfunctions.net/app/submit-form";
     // Send POST request to server to save data
-    fetch(jsonPath, {
+    const headers = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-    })
+    };
+    fetch(jsonPath, headers)
         .then((response) => response.json())
         .then((result) => {
             status.style.display = "block";
