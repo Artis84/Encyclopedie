@@ -7,8 +7,8 @@ form.addEventListener("submit", (event) => {
     const formData = new FormData(event.target); // Get form data
     const data = Object.fromEntries(formData.entries()); // Convert FormData to object
 
-    const jsonPath = "http://localhost:5001/encyclopedie-a9303/europe-west1/app/submit-form";
-    // const jsonPath = "https://europe-west1-encyclopedie-a9303.cloudfunctions.net/app/submit-form";
+    // const jsonPath = "http://localhost:5001/encyclopedie-a9303/europe-west1/app/submit-form";
+    const jsonPath = "https://europe-west1-encyclopedie-a9303.cloudfunctions.net/app/submit-form";
     // Send POST request to server to save data
     const headers = {
         method: "POST",
@@ -23,7 +23,6 @@ form.addEventListener("submit", (event) => {
             setTimeout(() => {
                 status.style.display = "none";
             }, 5000);
-            // location.href = "http://localhost:3000/submit-form";
         })
         .catch((error) => {
             status.style.display = "block";

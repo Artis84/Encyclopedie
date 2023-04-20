@@ -1,4 +1,5 @@
 // Define the path to your JSON file
+
 // const jsonPath = "http://localhost:5001/encyclopedie-a9303/europe-west1/app/data";
 const jsonPath = "https://europe-west1-encyclopedie-a9303.cloudfunctions.net/app/data";
 
@@ -34,14 +35,24 @@ const displayResults = (results) => {
         results.forEach((result) => {
             const resultDiv = document.createElement("div");
             resultDiv.innerHTML = `
-                <p><strong>${result.title}</strong></p>
-                <p>${result.content}</p>
+            <div class="cart">
+                <div class="title"><p><strong>${result.title}</strong></p></div>
+                <div class="content">
+                <button class="copyButton" onclick="copyContent('${result.content}')">Copy</button>
+                    <p>${result.content}</p>
+                </div>
+            </div>
             `;
             resultsDiv.appendChild(resultDiv);
         });
     } else {
         resultsDiv.innerHTML = "<p>No results found</p>";
     }
+};
+
+const copyContent = (content) => {
+    console.log(content);
+    navigator.clipboard.writeText(content);
 };
 
 // Initiate search on button click
