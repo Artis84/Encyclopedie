@@ -29,30 +29,71 @@ const displayError = (err) => {
 // Display results
 const displayResults = (results) => {
     const resultsDiv = document.getElementById("results");
+    document.getElementById("spinner").style.display = "block";
     resultsDiv.style.display = "block";
     resultsDiv.innerHTML = "";
+    let ResultsCardsCreated = 0;
     if (results.length > 0) {
-        results.forEach((result) => {
+        const fragment = document.createDocumentFragment(); // create Document Fragment
+        results.forEach(async (result) => {
+            // Replace FFZ emote codes with emote images
+            const contentWithFFZEmotes = await replaceEmoteCodesWithImages(result.content, "https://api.frankerfacez.com/v1/emote/");
+
             const resultDiv = document.createElement("div");
             resultDiv.innerHTML = `
             <div class="cart">
                 <div class="title"><p><strong>${result.title}</strong></p></div>
                 <div class="content">
-                <button class="copyButton" onclick="copyContent('${result.content}')">Copy</button>
-                    <p>${result.content}</p>
+                <button class="copyButton">Copy</button>
+                    <p id="textContent">${contentWithFFZEmotes}</p>
                 </div>
             </div>
             `;
-            resultsDiv.appendChild(resultDiv);
+
+            const copyButton = resultDiv.querySelector(".copyButton");
+            if (copyButton) {
+                copyButton.addEventListener("click", () => {
+                    const range = document.createRange();
+                    range.selectNode(resultDiv.querySelector("#textContent"));
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                    document.execCommand("copy");
+                    setTimeout(() => {
+                        window.getSelection().removeAllRanges();
+                    }, 250);
+                });
+            }
+            fragment.appendChild(resultDiv); // append resultDiv to fragment
+            ResultsCardsCreated++;
+            if (ResultsCardsCreated === results.length) {
+                // Hide spinner when all the resultDiv elements have been created and appended to the fragment
+                document.getElementById("spinner").style.display = "none";
+                resultsDiv.appendChild(fragment); // append fragment to resultsDiv
+            }
         });
     } else {
         resultsDiv.innerHTML = "<p>No results found</p>";
+        document.getElementById("spinner").style.display = "none"; // Hide spinner when no results found
     }
 };
 
-const copyContent = (content) => {
-    console.log(content);
-    navigator.clipboard.writeText(content);
+// Helper function to replace emote codes with images using a third-party API
+const replaceEmoteCodesWithImages = async (content, apiUrl) => {
+    const emoteRegex = /:([\w\d]+):/g;
+    const emoteCodes = content.match(emoteRegex) || [];
+    if (!emoteCodes.length) console.error("No emotes found");
+    for (const emoteCode of emoteCodes) {
+        const emoteId = emoteCode.slice(1, -1);
+        const fetchUrl = `${apiUrl + emoteId}`;
+        const response = await fetch(fetchUrl);
+        const data = await response.json();
+        if (data && "animated" in data.emote) {
+            content = content.replace(emoteCode, `<img src="https://cdn.frankerfacez.com/emote/${data.emote.id}/animated/1" alt="${data.emote.name}" title="${data.emote.name}">`);
+        } else {
+            content = content.replace(emoteCode, `<img src="https://cdn.frankerfacez.com/emote/${data.emote.id}/1" alt="${data.emote.name}" title="${data.emote.name}">`);
+        }
+    }
+    return content;
 };
 
 // Initiate search on button click
