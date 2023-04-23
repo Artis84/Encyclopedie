@@ -1,6 +1,5 @@
 functions/node_modules/
-.firebase
+.firebase/
 firebase-debug.log
 ui-debug.log
-node_modules/
 functions/encyclopedie-a9303-firebase-adminsdk-k3374-2461c4af81.json
