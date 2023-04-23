@@ -3,6 +3,10 @@
 // const jsonPath = "http://localhost:5001/encyclopedie-a9303/europe-west1/app/data";
 const jsonPath = "https://europe-west1-encyclopedie-a9303.cloudfunctions.net/app/data";
 
+window.onload = function () {
+    document.getElementById("search-input").focus();
+};
+
 // Fetch the JSON data
 const getJsonData = async () => {
     const response = await fetch(jsonPath);
