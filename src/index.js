@@ -81,22 +81,37 @@ const displayResults = (results) => {
     }
 };
 
-// Helper function to replace emote codes with images using a third-party API
 const replaceEmoteCodesWithImages = async (content, apiUrl) => {
     const emoteRegex = /:([\w\d]+):/g;
-    const emoteCodes = content.match(emoteRegex) || [];
-    if (!emoteCodes.length) console.error("No emotes found");
-    for (const emoteCode of emoteCodes) {
+    const rawContent = content.match(emoteRegex) || [];
+    if (!rawContent.length) console.error("No emotes found");
+
+    const uniqueEmoteIds = [...new Set(rawContent.map((emoteCode) => emoteCode.slice(1, -1)))];
+    const emoteData = {};
+
+    await Promise.all(
+        uniqueEmoteIds.map(async (emoteId) => {
+            const fetchUrl = `${apiUrl + emoteId}`;
+            const response = await fetch(fetchUrl);
+            const data = await response.json();
+            emoteData[emoteId] = data;
+        })
+    );
+
+    const modifyContent = rawContent.map((emoteCode) => {
         const emoteId = emoteCode.slice(1, -1);
-        const fetchUrl = `${apiUrl + emoteId}`;
-        const response = await fetch(fetchUrl);
-        const data = await response.json();
+        const data = emoteData[emoteId];
         if (data && "animated" in data.emote) {
-            content = content.replace(emoteCode, `<img src="https://cdn.frankerfacez.com/emote/${data.emote.id}/animated/1" alt="${data.emote.name}" title="${data.emote.name}">`);
+            return `<img src="https://cdn.frankerfacez.com/emote/${data.emote.id}/animated/1" alt="${data.emote.name}" title="${data.emote.name}">`;
         } else {
-            content = content.replace(emoteCode, `<img src="https://cdn.frankerfacez.com/emote/${data.emote.id}/1" alt="${data.emote.name}" title="${data.emote.name}">`);
+            return `<img src="https://cdn.frankerfacez.com/emote/${data.emote.id}/1" alt="${data.emote.name}" title="${data.emote.name}">`;
         }
+    });
+
+    for (let i = 0; i < rawContent.length; i++) {
+        content = content.replace(rawContent[i], modifyContent[i]);
     }
+
     return content;
 };
 
